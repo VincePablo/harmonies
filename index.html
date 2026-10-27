@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Harmonies</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=IM+Fell+English:ital@0;1&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap">
 <style>
 /* Layout: table de jeu — colonne gauche = offre commune (jetons + animaux), colonne droite = plateau du joueur actif */
 :root{
@@ -17,14 +17,6 @@
   --f-display:"Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
   --f-body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
-@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
-  --bg:#121915; --panel:#1b241f; --ink:#e4ece5; --muted:#9aaa9e; --line:#2f3b34;
-  --accent:#6cc0a6; --accent-ink:#0f1a15; --cell:#243029; --cell-line:#3a4a41; --hi:#f0b94a; --danger:#e57a6c;
-  --t-any:#5d5a52; --t-any-d:#3c3a34; color-scheme:dark }}
-:root[data-theme="dark"]{
-  --bg:#121915; --panel:#1b241f; --ink:#e4ece5; --muted:#9aaa9e; --line:#2f3b34;
-  --accent:#6cc0a6; --accent-ink:#0f1a15; --cell:#243029; --cell-line:#3a4a41; --hi:#f0b94a; --danger:#e57a6c;
-  --t-any:#5d5a52; --t-any-d:#3c3a34; color-scheme:dark }
 *{box-sizing:border-box}
 html{background:var(--bg)}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45;
@@ -196,6 +188,120 @@ h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance}
   @keyframes pop{0%{opacity:0;transform:translateY(.3px) scale(.4)}16%{opacity:1;transform:scale(1.25)}32%{transform:scale(1)}75%{opacity:1}100%{opacity:0;transform:translateY(-1.3px)}}
   @keyframes winpulse{50%{transform:scale(1.02)}}
 }
+
+/* ===================== Style BD / manga minimaliste ===================== */
+/* Layout : cases de BD à bord épais et ombre franche ; encre noire, papier blanc, une couleur d'accent rouge */
+:root{
+  --paper:#fbfaf6; --ink:#141414; --bg:#fbfaf6; --panel:#ffffff; --muted:#555555; --line:#141414;
+  --accent:#e8412f; --accent-ink:#ffffff; --cell:#ffffff; --cell-line:#141414; --hi:#ffd23f; --danger:#e8412f;
+  --t-blue:#55aee6; --t-blue-d:#2f78ad; --t-grey:#b7bdc3; --t-grey-d:#7a8188; --t-brown:#b0743f; --t-brown-d:#76491f;
+  --t-green:#6cc35a; --t-green-d:#3c8a2c; --t-yellow:#ffd23f; --t-yellow-d:#c99b12; --t-red:#ef5a46; --t-red-d:#a8301f;
+  --t-any:#eeeeee; --t-any-d:#9a9a9a;
+  --f-display:"Dela Gothic One","Arial Black",Impact,sans-serif;
+  --f-body:"Zen Kaku Gothic New",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --shadow:5px 5px 0 var(--ink);
+  color-scheme:light;
+}
+body{background:var(--paper) radial-gradient(circle,rgba(20,20,20,.07) 1px,transparent 1.3px) 0 0/7px 7px;color:var(--ink);font-family:var(--f-body);font-weight:500}
+h1,h2,h3{font-family:var(--f-display);font-weight:400}
+.top h1{font-weight:400;letter-spacing:0;font-size:clamp(30px,5.5vw,44px)}
+.top h1 span{color:var(--accent)}
+.top h1::after{content:"ハーモニーズ";display:inline-block;margin-left:12px;vertical-align:middle;font-family:var(--f-body);font-weight:900;font-size:12px;letter-spacing:.25em;background:var(--ink);color:#fff;padding:3px 8px;transform:translateY(-4px) rotate(-3deg)}
+.meta{color:var(--ink);font-weight:700}
+.panel{background:#fff;border:3px solid var(--ink);border-radius:4px;box-shadow:var(--shadow)}
+.label{color:var(--ink);font-family:var(--f-display);font-weight:400;font-size:12px;letter-spacing:.06em}
+.btn{border:2.5px solid var(--ink);border-radius:999px;background:#fff;box-shadow:3px 3px 0 var(--ink);font-weight:700;font-family:var(--f-body);transition:transform .08s, box-shadow .08s}
+.btn:not([disabled]):hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+.btn:not([disabled]):active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--ink)}
+.btn[disabled]{opacity:.35;box-shadow:none}
+.chip{border:2.5px solid var(--ink);background:#fff;box-shadow:3px 3px 0 var(--ink);font-weight:700}
+.chip .dot{border:2px solid var(--ink);width:12px;height:12px;background:#fff}
+.chip.cur .dot{background:var(--accent)}
+.chip.view{background:var(--hi)}
+.chip b{font-family:var(--f-display);font-weight:400}
+.tag{border:1.5px solid var(--ink);color:var(--ink);background:#fff;font-weight:900}
+.slot{border:2.5px solid var(--ink);border-radius:10px;background:#fff;box-shadow:3px 3px 0 var(--ink);transition:transform .08s, box-shadow .08s}
+.slot:not([disabled]):hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink);border-color:var(--ink)}
+.slot[disabled]{box-shadow:none;background:radial-gradient(circle,rgba(20,20,20,.12) 1px,transparent 1.3px) 0 0/5px 5px #fff}
+/* Bulle de dialogue pour les consignes */
+.play > .panel:first-child{background:transparent;border:0;box-shadow:none;padding:0}
+.guide p{position:relative;background:#fff;border:2.5px solid var(--ink);border-radius:22px;padding:10px 16px;font-weight:700;box-shadow:3px 3px 0 var(--ink)}
+.guide p::after{content:"";position:absolute;left:26px;bottom:-8.5px;width:13px;height:13px;background:#fff;border-right:2.5px solid var(--ink);border-bottom:2.5px solid var(--ink);transform:rotate(45deg) skew(8deg,8deg)}
+.guide{margin-bottom:6px}
+.guide .who{color:var(--accent);font-family:var(--f-display);font-weight:400}
+.htok{border-width:3px}
+.htok.sel{border-color:var(--accent)}
+.cell{fill:#ffffff;stroke:var(--ink);stroke-width:.075}
+.cell.legal{fill:#fff1a8;stroke:var(--ink);stroke-width:.075}
+.cell.target{fill:#c8f0d6;stroke:var(--ink);stroke-width:.075}
+.card{border:2.5px solid var(--ink);border-radius:6px;background:#fff;box-shadow:4px 4px 0 var(--ink)}
+.card:not([disabled]):hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+.card.sel{border-color:var(--ink);box-shadow:4px 4px 0 var(--accent);outline:3px solid var(--accent);outline-offset:1px}
+.card.ready::after{content:"Prêt !";background:var(--hi);color:var(--ink);border:2px solid var(--ink);font-family:var(--f-display);font-weight:400;letter-spacing:.02em;border-radius:12px;transform:rotate(6deg);top:4px;right:4px}
+.card.empty{border-style:dashed;box-shadow:none;background:transparent;font-weight:700}
+.card svg.art{border:2px solid var(--ink);border-radius:3px;box-shadow:none}
+.card .cname{font-family:var(--f-display);font-weight:400;font-size:16px}
+.card .lat{font-family:var(--f-body);font-style:normal;font-weight:900;font-size:11px;letter-spacing:.18em;color:var(--muted);margin-top:-5px}
+.cname i{border:1.5px solid var(--ink);border-radius:3px;width:11px;height:11px}
+.track span{border:2px solid var(--ink);border-radius:5px;background:#fff;font-weight:900}
+.track span.got{background:var(--hi);color:var(--ink);border-color:var(--ink)}
+.track span.cube::before{border:1.5px solid var(--ink);box-shadow:none}
+.score td{border-bottom:1.5px dashed var(--ink)}
+.score tr.tot td{font-family:var(--f-display);font-weight:400}
+.done span{border:2px solid var(--ink);color:var(--ink);font-weight:700;background:#fff}
+.note{color:var(--muted);font-weight:500}
+.modal{background:rgba(251,250,246,.75);backdrop-filter:none}
+.sheet{border:3px solid var(--ink);border-radius:6px;box-shadow:8px 8px 0 var(--ink);background:#fff}
+.sheet h2{font-weight:400}
+.field input{border:2.5px solid var(--ink);border-radius:8px;background:#fff;font-weight:700}
+.seg button{border:2.5px solid var(--ink);background:#fff;border-radius:8px;font-weight:700}
+.seg button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.prow{border:2.5px solid var(--ink);background:#fff;border-radius:8px}
+.prow .seg button{background:#fff}
+.prow .seg button.on{background:var(--ink)}
+.rank div{border:2.5px solid var(--ink);border-radius:8px;background:#fff}
+.rank div:first-child{background:var(--hi);border-color:var(--ink)}
+.rtab td,.dtab td{border-bottom:1.5px dashed var(--ink)}
+.dtab th{border-bottom:3px solid var(--ink);font-weight:400}
+.lastbadge{background:var(--accent);color:#fff;border:2px solid var(--ink);padding:1px 8px;font-family:var(--f-display);font-weight:400;transform:rotate(-2deg);display:inline-block}
+.thinking{background:var(--accent);border:1.5px solid var(--ink)}
+/* Annonce du dernier tour : lignes de vitesse et onomatopées */
+.fx{background:radial-gradient(circle at 50% 50%, #fff 0 23%, transparent 23.5%), repeating-conic-gradient(from 0deg at 50% 50%, #141414 0deg .9deg, #fff .9deg 6deg)}
+.fx .fxin{color:var(--ink);background:#fff;border:3px solid var(--ink);box-shadow:8px 8px 0 var(--ink);border-radius:6px;padding:22px 28px;margin:16px}
+.fx .eyebrow{display:inline-block;background:var(--ink);color:#fff;padding:3px 10px;font-family:var(--f-body);font-weight:900;letter-spacing:.2em}
+.fx h2{font-family:var(--f-display);font-weight:400;color:var(--accent);-webkit-text-stroke:2px var(--ink);text-shadow:5px 5px 0 var(--ink);text-transform:uppercase;letter-spacing:.01em;font-size:clamp(40px,10vw,92px)}
+.fx p{color:var(--ink);font-weight:700}
+.fx .ring,.fx .eyes{display:none}
+.sfx{position:absolute;font-family:var(--f-display);font-size:clamp(44px,11vw,104px);line-height:1;color:#fff;-webkit-text-stroke:2.5px var(--ink);text-shadow:5px 5px 0 var(--ink);pointer-events:none;z-index:1}
+.sfx1{left:4%;top:7%;transform:rotate(-14deg)}
+.sfx2{right:4%;bottom:7%;transform:rotate(11deg);color:var(--hi)}
+/* Décompte final */
+.finale{background:var(--paper) radial-gradient(circle,rgba(20,20,20,.07) 1px,transparent 1.3px) 0 0/7px 7px}
+.fhead .eyebrow{display:inline-block;background:var(--ink);color:#fff;padding:3px 10px;font-weight:900}
+.fhead h2{font-family:var(--f-display);font-weight:400}
+.fhead .sub{color:var(--ink);font-weight:700}
+.fcard{border:3px solid var(--ink);border-radius:4px;box-shadow:var(--shadow);background:#fff}
+.fcard.win{background:#fff6cc;border-color:var(--ink);box-shadow:6px 6px 0 var(--accent),0 0 0 3px var(--accent)}
+.fcard.win .rankb{color:var(--accent)}
+.ftot,.rankb{font-family:var(--f-display);font-weight:400}
+.fchip{border:2px solid var(--ink);color:var(--ink);font-weight:700}
+.fchip.on{background:var(--hi);border-color:var(--ink)}
+.fchip.cur{border-color:var(--accent);box-shadow:2px 2px 0 var(--accent)}
+.fol{stroke:var(--accent);stroke-width:.15}
+.fol.fz{stroke:var(--ink);stroke-dasharray:.18 .14}
+.pop{font-family:var(--f-display);font-weight:400;fill:var(--accent);stroke:var(--ink);stroke-width:.24px;paint-order:stroke}
+.pop.zero{fill:#ffffff}
+.fend p{font-family:var(--f-display)}
+.rmap text{font-family:var(--f-display);font-weight:400}
+.linkrow input{border:2.5px solid var(--ink);border-radius:8px;background:#fff;font-weight:700}
+.bigcode{font-family:var(--f-display);font-weight:400;color:var(--accent);-webkit-text-stroke:1.5px var(--ink)}
+@media (prefers-reduced-motion:no-preference){
+  .sfx1{animation:sfxpop .45s cubic-bezier(.2,1.7,.4,1) .08s both}
+  .sfx2{animation:sfxpop .45s cubic-bezier(.2,1.7,.4,1) .3s both}
+  @keyframes sfxpop{0%{opacity:0;scale:.2}100%{opacity:1;scale:1}}
+}
+
 @media (max-width:860px){
   .wrap{grid-template-columns:minmax(0,1fr);grid-template-areas:"top" "bar" "offer" "play" "animals"}
 }
@@ -209,11 +315,7 @@ h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance}
 <body>
 
 
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-<radialGradient id="parch" cx="50%" cy="45%" r="70%"><stop offset="0" stop-color="#efe4c8"/><stop offset=".7" stop-color="#e2d2ac"/><stop offset="1" stop-color="#b99d68"/></radialGradient>
-<filter id="rough" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="1.3"/></filter>
-<pattern id="hatch" width="2.2" height="2.2" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><line x1="0" y1="0" x2="0" y2="2.2" stroke="#241a14" stroke-width=".5"/></pattern>
-</defs></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><pattern id="tone" width="3" height="3" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r=".55" fill="#141414" opacity=".22"/></pattern></defs></svg>
 <div class="wrap" id="app"></div>
 <div id="modal"></div>
 <div id="fx"></div>
@@ -424,7 +526,7 @@ function lastRoundFx(bagOut, remaining){
   fxOn=true;
   const who=S.players.slice(S.cur).map(x=>x.name);
   const eyes=Array.from({length:14},(_,i)=>`<i style="left:${(i*37+11)%92+3}%;top:${(i*53+7)%86+5}%;animation-delay:${(i%5)*.12}s;transform:scale(${.7+(i%4)*.25})"></i>`).join("");
-  document.getElementById("fx").innerHTML=`<div class="fx" data-a="fxclose" role="alert"><div class="eyes">${eyes}</div><span class="ring"></span><span class="ring r2"></span>
+  document.getElementById("fx").innerHTML=`<div class="fx" data-a="fxclose" role="alert"><div class="sfx sfx1" aria-hidden="true">ドン!</div><div class="sfx sfx2" aria-hidden="true">ドン!</div>
     <div class="fxin"><div class="eyebrow">${bagOut?"Le sac est vide":"Un paysage est achevé"}</div><h2>Dernier tour</h2>
     <p>${esc(S.endReason)}.</p><p style="margin-top:6px">${remaining===1?`${esc(who[0])} joue une dernière fois avant le décompte.`:`${who.map(esc).join(", ")} jouent une dernière fois avant le décompte.`}</p></div></div>`;
   const app=document.getElementById("app"); app.classList.remove("shake"); void app.offsetWidth; app.classList.add("shake");
@@ -547,13 +649,13 @@ function runBot(g){
 // ---------- Dessin ----------
 function hexPts(cx,cy,R){ let s=""; for(let i=0;i<6;i++){ const a=Math.PI/180*(60*i-90); s+=(cx+R*Math.cos(a)).toFixed(3)+","+(cy+R*Math.sin(a)).toFixed(3)+" "; } return s; }
 function stackSvg(s,cx,cy,R,cube){
-  let o=""; const rx=R*.6, ry=R*.34, th=R*.2, base=cy+(s.length-1)*th*.5+R*.06;
-  s.forEach((c,i)=>{ const y=base-i*th;
-    o+=`<ellipse cx="${cx}" cy="${y+th*.55}" rx="${rx}" ry="${ry}" fill="var(--t-${c}-d)"/>`+
-       `<rect x="${cx-rx}" y="${y}" width="${2*rx}" height="${th*.55}" fill="var(--t-${c}-d)"/>`+
-       `<ellipse cx="${cx}" cy="${y}" rx="${rx}" ry="${ry}" fill="var(--t-${c})"/>`;
+  let o=""; const rx=R*.62, ry=R*.36, th=R*.25, base=cy+(s.length-2)*th*.5, sw=(R*.0375).toFixed(3);
+  s.forEach((c,i)=>{ const y=base-i*th, h=th;
+    o+=`<path d="M${cx-rx},${y} L${cx-rx},${y+h} A${rx},${ry} 0 0 0 ${cx+rx},${y+h} L${cx+rx},${y} Z" fill="var(--t-${c}-d)" stroke="#141414" stroke-width="${sw}" stroke-linejoin="round"/>`+
+       `<ellipse cx="${cx}" cy="${y}" rx="${rx}" ry="${ry}" fill="var(--t-${c})" stroke="#141414" stroke-width="${sw}"/>`;
+    if(i===s.length-1 && c!=="any") o+=`<path d="M${(cx-rx*.62).toFixed(3)},${(y-ry*.05).toFixed(3)} A${(rx*.62).toFixed(3)},${(ry*.62).toFixed(3)} 0 0 1 ${(cx-rx*.12).toFixed(3)},${(y-ry*.6).toFixed(3)}" fill="none" stroke="#ffffff" stroke-width="${(R*.08).toFixed(3)}" stroke-linecap="round"/>`;
   });
-  if(cube){ const y=base-(s.length-1)*th, z=R*.36; o+=`<rect x="${cx-z/2}" y="${y-z*.75}" width="${z}" height="${z}" rx="${z*.15}" fill="${cube.hue}" stroke="#1d1d1d" stroke-width="${R*.04}"/>`; }
+  if(cube){ const y=base-(s.length-1)*th, z=R*.4; o+=`<rect x="${cx-z/2}" y="${y-z*.8}" width="${z}" height="${z}" rx="${z*.12}" fill="${cube.hue}" stroke="#141414" stroke-width="${(R*.04).toFixed(3)}"/><rect x="${cx-z/2+z*.16}" y="${y-z*.8+z*.14}" width="${z*.22}" height="${z*.22}" fill="#ffffff" opacity=".85"/>`; }
   return o;
 }
 function reqStack(r){ if(r.t==="water") return ["blue"]; if(r.t==="field") return ["yellow"]; if(r.t==="tree") return [...Array(r.h-1).fill("brown"),"green"]; if(r.t==="mountain") return Array(r.h).fill("grey"); return ["any","red"]; }
@@ -562,71 +664,72 @@ function patternSvg(id){
   const xs=pts.map(p=>p.x), ys=pts.map(p=>p.y), m=1.05;
   const vb=[Math.min(...xs)-m,Math.min(...ys)-m-.25,Math.max(...xs)-Math.min(...xs)+2*m,Math.max(...ys)-Math.min(...ys)+2*m+.25];
   let o=`<svg viewBox="${vb.join(" ")}" aria-hidden="true">`;
-  pts.forEach((p,i)=>{ o+=`<polygon points="${hexPts(p.x,p.y,.98)}" fill="var(--cell)" stroke="${i===0?CARDS[id].hue:"var(--cell-line)"}" stroke-width="${i===0?.12:.05}"/>`+stackSvg(reqStack(p.p),p.x,p.y,1,i===0?{hue:CARDS[id].hue}:null); });
+  pts.forEach(p=>{ o+=`<polygon points="${hexPts(p.x,p.y,1)}" fill="var(--cell)" stroke="var(--cell-line)" stroke-width=".075"/>`; });
+  o+=`<polygon points="${hexPts(pts[0].x,pts[0].y,.86)}" fill="none" stroke="${CARDS[id].hue}" stroke-width=".14"/>`;
+  pts.forEach((p,i)=>{ o+=stackSvg(reqStack(p.p),p.x,p.y,1,i===0?{hue:CARDS[id].hue}:null); });
   return o+"</svg>";
 }
-function tokSvg(cols,size){ const w=cols.length*size; let o=`<svg viewBox="0 0 ${w} ${size}" aria-hidden="true">`; cols.forEach((c,i)=>{ const cx=i*size+size/2, r=size*.42; o+=`<circle cx="${cx}" cy="${size/2+1.5}" r="${r}" fill="var(--t-${c}-d)"/><circle cx="${cx}" cy="${size/2}" r="${r}" fill="var(--t-${c})"/>`; }); return o+"</svg>"; }
+function tokSvg(cols,size){ const w=cols.length*size; let o=`<svg viewBox="0 0 ${w} ${size}" aria-hidden="true">`; cols.forEach((c,i)=>{ const cx=i*size+size/2, cy=size/2-1, r=size*.36, sw=size*.04; o+=`<circle cx="${cx+2}" cy="${cy+2}" r="${r}" fill="#141414"/><circle cx="${cx}" cy="${cy}" r="${r}" fill="var(--t-${c})" stroke="#141414" stroke-width="${sw}"/><path d="M${cx-r*.55},${cy-r*.05} A${r*.6},${r*.6} 0 0 1 ${cx-r*.05},${cy-r*.58}" fill="none" stroke="#fff" stroke-width="${sw*1.1}" stroke-linecap="round"/>`; }); return o+"</svg>"; }
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
-// ---------- Bestiaire illustré ----------
-const INK="#241a14", PAR="#efe4c8", RUST="#8f3a22", GOLD="#b8902f";
-const E=(cx,cy,rx,ry,r=0)=>`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" transform="rotate(${r} ${cx} ${cy})"/>`;
-const Pf=d=>`<path d="${d}"/>`;
-const Ps=(d,w)=>`<path d="${d}" fill="none" stroke="${INK}" stroke-width="${w}" stroke-linecap="round"/>`;
-function tent(x,y,a,len,curl,w){
-  const n=16, L=[], R=[]; let cx=x, cy=y, ang=a*Math.PI/180, su="";
-  for(let i=0;i<=n;i++){ const t=i/n, ww=w*(1-t)+.22, nx=Math.cos(ang+Math.PI/2), ny=Math.sin(ang+Math.PI/2);
-    L.push([cx+nx*ww,cy+ny*ww]); R.push([cx-nx*ww,cy-ny*ww]);
-    if(i>1 && i<n-3 && i%2===0 && w>0.9) su+=`<circle cx="${(cx-nx*ww*.45).toFixed(2)}" cy="${(cy-ny*ww*.45).toFixed(2)}" r="${(ww*.28).toFixed(2)}" fill="${PAR}"/>`;
-    ang+=curl*t*.35; cx+=Math.cos(ang)*len/n; cy+=Math.sin(ang)*len/n; }
-  return `<polygon points="${L.concat(R.reverse()).map(p=>p[0].toFixed(2)+","+p[1].toFixed(2)).join(" ")}"/>`+su;
-}
-const eye=(x,y,r)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${PAR}" stroke="${INK}" stroke-width="${r*.22}"/><circle cx="${x}" cy="${y}" r="${r*.55}" fill="${RUST}"/><ellipse cx="${x}" cy="${y}" rx="${r*.18}" ry="${r*.5}" fill="${INK}"/>`;
+// ---------- Bestiaire BD / manga ----------
+const K="#141414", WH="#ffffff";
+const _so=f=>`fill="${f}" stroke="${K}" stroke-width="1.6" stroke-linejoin="round"`;
+const _o=(cx,cy,rx,ry,f,r=0)=>`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" ${_so(f)}${r?` transform="rotate(${r} ${cx} ${cy})"`:""}/>`;
+const _p=(d,f)=>`<path d="${d}" ${_so(f)}/>`;
+const _l=(d,w=1.6,c=K)=>`<path d="${d}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`;
+const _t=(d,w,f)=>_l(d,w+3.2)+_l(d,w,f);
+const _e=(x,y,r=1.4)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${K}"/><circle cx="${(x-r*.35).toFixed(2)}" cy="${(y-r*.4).toFixed(2)}" r="${(r*.38).toFixed(2)}" fill="${WH}"/>`;
+const _b=(x,y)=>`<ellipse cx="${x}" cy="${y}" rx="2.2" ry="1.2" fill="#ff8fa3" opacity=".8"/>`;
+const _d=(x,y,r=1,f=K)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${f}"/>`;
+const HAB={water:"#e1f2fc",grass:"#ecf7df",rock:"#eceff2",stone:"#fcefe8",sky:"#fff6d2",none:"#fcefe8"};
+const wave=y=>_l(`M-4,${y} q5,-3 10,0 t10,0 t10,0 t10,0 t10,0 t10,0 t10,0 t10,0 t10,0 t10,0 t10,0`,1.4,"#2f78ad");
 const GROUND={
-  water:[56,61,66].map(y=>Ps(`M-4,${y} q5,-3 10,0 t10,0 t10,0 t10,0 t10,0 t10,0 t10,0 t10,0 t10,0 t10,0 t10,0`,.7)).join(""),
-  grass:Ps("M4,60 L96,60",.8)+Array.from({length:18},(_,i)=>Ps(`M${7+i*5},60 l-1,-4 M${8+i*5},60 l1.5,-5`,.5)).join(""),
-  rock:`<path d="M0,70 L0,58 L14,52 L26,57 L40,49 L56,55 L72,48 L86,54 L100,51 L100,70Z" fill="url(#hatch)" stroke="${INK}" stroke-width=".8"/>`,
-  stone:`<path d="M0,70 L0,62 L100,62 L100,70Z" fill="url(#hatch)" stroke="${INK}" stroke-width=".8"/>`,
-  sky:Array.from({length:9},(_,i)=>`<circle cx="${(i*37%90)+6}" cy="${(i*23%20)+8}" r=".6" fill="${GOLD}"/>`).join("")
+  water:wave(61)+wave(66),
+  grass:_l("M-2,61 L102,61",1.6)+Array.from({length:9},(_,i)=>_l(`M${6+i*11},61 l1,-4 l1,4 M${9+i*11},61 l1.5,-3`,1.2,"#3c8a2c")).join(""),
+  rock:_p("M-2,72 L-2,58 L12,52 L24,58 L38,50 L54,57 L70,49 L86,55 L102,51 L102,72Z","#cdd2d7"),
+  stone:_p("M-2,72 L-2,63 L102,63 L102,72Z","#eab9a6")+_l("M20,63 L20,72 M45,63 L45,72 M70,63 L70,72 M90,63 L90,72",1.2),
+  sky:_p("M8,60 q2,-6 8,-4 q3,-5 9,-1 q5,-1 5,4 Z",WH)+_p("M70,62 q2,-5 7,-3 q3,-4 8,0 q4,0 4,3Z",WH),
+  none:""
 };
+const BR="#a0673f", BRD="#7a4a26", OR="#f07f2e", YE="#ffd23f", PK="#ff9fae", GRN="#6cc35a", BLU="#2f9fe0", CRM="#f2d6b0";
 const ART=[
- {lat:"Ardea abyssi",g:"water",b:[E(46,34,12,6,-15),Ps("M54,30 Q61,22 58,14",2.6),E(60,13,4,3),Pf("M63,12 L79,16 L63,15Z"),Pf("M35,33 L25,40 L35,37Z"),Ps("M46,39 L46,58",1.1),Ps("M50,38 L55,47 L50,58",1.1)],t:[[40,38,110,14,.5,1.6],[52,38,70,12,-.5,1.4]],e:[[56,22,1.6],[57.5,17,1.2],[61,13,1.3]]},
- {lat:"Rana innominata",g:"water",b:[E(50,46,17,9),E(40,37,6,5),E(60,37,6,5),Pf("M34,50 Q22,56 30,61 L39,56Z"),Pf("M66,50 Q78,56 70,61 L61,56Z")],t:[[50,50,90,14,.6,1.8],[45,50,125,10,-.5,1.2],[55,50,55,10,.5,1.2]],e:[[40,36,3.2],[60,36,3.2],[50,40,2.2],[45,30,1.5],[55,30,1.5]]},
- {lat:"Lutra profunda",g:"water",b:[E(48,40,20,6,-8),E(70,34,6,5),E(67,29,1.8,1.8),Ps("M40,44 L38,50 M56,42 L58,48",1.6)],t:[[29,43,170,18,-.5,2.4],[75,35,10,8,.6,.6],[75,36,30,9,-.6,.6],[74,37,60,7,.5,.6]],e:[[72,33,1.7],[50,37,1.3],[42,38,1.3],[58,36,1.3]]},
- {lat:"Castor tenebrarum",g:"water",b:[E(46,42,15,11),E(62,34,8,7),`<ellipse cx="26" cy="50" rx="10" ry="4" transform="rotate(25 26 50)" fill="url(#hatch)" stroke="${INK}" stroke-width="1"/>`,`<rect x="66" y="38" width="3" height="3" fill="${PAR}" stroke="${INK}" stroke-width=".4"/>`],t:[[50,52,100,8,.4,1.4],[40,52,80,8,-.4,1.4]],e:[[22,48,1.5],[27,50,1.5],[31,52,1.3],[64,31,1.9],[59,30,1.2]]},
- {lat:"Salmo dagonis",g:"water",b:[Pf("M22,46 Q40,18 66,26 Q76,30 80,38 Q70,40 64,36 Q44,34 30,52 Z"),Pf("M23,46 L11,39 L15,53Z")],t:[[46,28,-80,10,.5,1.4],[52,34,100,10,-.5,1.2],[76,38,80,8,.6,.8]],e:[[72,32,2],[60,28,1.3],[50,29,1.3],[40,33,1.3]]},
- {lat:"Alcedo stygia",g:"water",b:[Ps("M8,44 L92,48",2.2),E(50,36,9,6,-20),E(58,29,5,5),Pf("M62,27 L81,23 L62,31Z"),Pf("M42,40 L33,51 L45,42Z")],t:[[50,42,95,16,.4,1.2],[54,42,85,18,-.4,1.2]],e:[[59,28,1.8],[52,33,1.2],[47,36,1.2]]},
- {lat:"Erinaceus vermiformis",g:"grass",b:[Pf("M28,56 Q30,32 52,32 Q68,34 72,48 L79,52 L71,55 L28,56Z")],t:[[32,42,-150,11,.5,1],[38,36,-125,12,-.5,1],[46,33,-100,13,.5,1],[54,33,-80,13,-.5,1],[62,36,-60,12,.5,1],[67,41,-40,10,-.5,1]],e:[[70,47,1.7],[60,46,1.2],[46,46,1.2]]},
- {lat:"Sciurus spiralis",g:"grass",b:[E(58,46,8,10,10),E(62,33,6,5),Pf("M59,29 L60,22 L63,28Z"),Ps("M62,55 L66,58",1.6)],t:[[50,52,-120,36,.95,4.2]],e:[[64,32,1.8],[59,31,1.2],[56,44,1.2]]},
- {lat:"Strix omnividens",g:"stone",b:[E(50,36,12,16),Pf("M40,23 L42,13 L46,21Z"),Pf("M60,23 L58,13 L54,21Z")],t:[[46,51,100,10,.5,1.2],[54,51,80,10,-.5,1.2]],e:[[45,28,3.4],[55,28,3.4],[50,36,2.2],[44,41,1.5],[56,41,1.5],[50,45,1.5]]},
- {lat:"Cervus chthonius",g:"grass",b:[E(48,42,15,7),Ps("M38,46 L37,59 M44,47 L44,59 M54,47 L55,59 M58,46 L60,59",1.4),Ps("M58,38 Q62,32 63,27",3),E(64,26,5,3.6,15)],t:[[63,23,-100,16,-.7,1.2],[66,23,-70,16,.7,1.2],[62,24,-135,10,.6,.8],[68,24,-40,10,-.6,.8]],e:[[66,26,1.4],[50,40,1.3],[44,42,1.3]]},
- {lat:"Lepus vaticinans",g:"grass",b:[E(48,48,12,8),E(58,39,6,5),`<circle cx="36" cy="46" r="3" fill="${PAR}" stroke="${INK}" stroke-width=".8"/>`],t:[[57,35,-100,18,-.5,1.6],[61,35,-75,18,.6,1.6]],e:[[61,38,1.7],[55,40,1.1],[48,46,1.3]]},
- {lat:"Alauda caelestis",g:"sky",b:[Pf("M18,32 Q36,16 50,34 Q64,16 82,32 Q64,29 50,41 Q36,29 18,32Z"),E(50,38,4,7),Pf("M47,44 L50,52 L53,44Z")],t:[[48,46,100,12,.5,1],[52,46,80,12,-.5,1]],e:[[31,27,1.6],[40,28,1.4],[60,28,1.4],[69,27,1.6],[50,35,1.6]]},
- {lat:"Vulpes multicauda",g:"grass",b:[E(50,46,14,7),E(65,38,5,4),Pf("M64,40 L78,39 L66,35Z"),Pf("M62,35 L63,27 L67,34Z"),Ps("M42,50 L41,59 M58,50 L59,59",1.4)],t:[[37,44,-160,20,.7,2.4],[37,46,170,20,-.6,2.2],[37,45,-140,16,.9,1.8]],e:[[67,37,1.5],[63,35,1],[50,44,1.2]]},
- {lat:"Ursus antiquus",g:"rock",b:[E(48,40,20,13),E(68,33,9,7),`<circle cx="63" cy="26" r="2.5"/>`,`<circle cx="71" cy="26" r="2.5"/>`],t:[[75,37,40,10,.6,1],[76,38,80,10,-.5,1],[74,39,110,9,.5,1]],e:[[71,31,1.7],[65,30,1.2],[46,34,1.4],[38,38,1.4],[54,38,1.2]]},
- {lat:"Rupicapra cornuta",g:"rock",b:[E(48,38,12,6),Ps("M40,42 L39,50 M45,43 L45,49 M52,43 L53,48 M56,42 L58,47",1.3),Ps("M57,35 Q60,30 61,27",2.4),E(62,26,4,3.4,15)],t:[[61,23,-100,9,-1.2,.9],[63,23,-85,9,-1.2,.9]],e:[[63,26,1.3],[46,36,1.2],[50,37,1]]},
- {lat:"Aquila stellarum",g:"sky",b:[Pf("M8,30 Q30,14 46,30 L50,26 L54,30 Q70,14 92,30 Q72,31 56,41 L50,46 L44,41 Q28,31 8,30Z"),E(50,24,4,4),Pf("M50,26 L48,31 L52,28Z")],t:[[46,45,100,12,.6,1.2],[54,45,80,12,-.6,1.2]],e:[[24,25,1.6],[32,23,1.4],[68,23,1.4],[76,25,1.6],[50,23,1.4]]},
- {lat:"Marmota dormiens",g:"rock",b:[E(50,40,9,13),E(50,25,7,6),`<circle cx="45" cy="20" r="1.8"/>`,`<circle cx="55" cy="20" r="1.8"/>`],t:[[42,36,170,11,-.6,1.2],[58,36,10,11,.6,1.2]],e:[[47,25,1.5],[53,25,1.5],[50,21,1.2]]},
- {lat:"Ciconia turris",g:"stone",b:[`<path d="M36,62 L36,40 L39,40 L39,37 L43,37 L43,40 L47,40 L47,37 L53,37 L53,40 L57,40 L57,37 L61,37 L61,40 L64,40 L64,62Z" fill="url(#hatch)" stroke="${INK}" stroke-width=".9"/>`,`<path d="M48,62 L48,54 Q50,50 52,54 L52,62Z" fill="${INK}"/>`,E(50,28,8,5,-10),Ps("M56,26 Q60,20 58,15",2),E(59,14,3,2.4),Pf("M61,13 L76,17 L61,15Z"),Ps("M48,32 L47,37 M52,32 L53,37",1)],t:[[36,48,180,10,.6,1.2],[64,50,0,10,-.6,1.2]],e:[[59.5,13.5,1.2],[54,24,1.1],[50,47,1.4]]},
- {lat:"Passer innumerus",g:"none",b:[`<path d="M14,62 L50,40 L86,62Z" fill="url(#hatch)" stroke="${INK}" stroke-width="1"/>`,E(50,33,7,5),E(56,29,4,4),Pf("M59,28 L65,30 L59,31Z"),Pf("M43,34 L36,38 L44,36Z")],t:[[47,37,100,6,.4,.8],[52,37,80,6,-.4,.8]],e:[[57,28,1.3],[48,31,1],[52,34,1],[40,54,1.4],[60,54,1.4],[50,50,1.4],[50,57,1.2]]},
- {lat:"Vespertilio noctis",g:"sky",b:[Pf("M12,30 Q24,28 30,37 Q34,31 40,37 Q44,27 50,33 Q56,27 60,37 Q66,31 70,37 Q76,28 88,30 Q74,19 56,22 L50,16 L44,22 Q26,19 12,30Z"),E(50,28,5,8),Pf("M46,22 L45,15 L49,21Z"),Pf("M54,22 L55,15 L51,21Z")],t:[[50,35,90,16,.6,1.4]],e:[[48,26,1.4],[52,26,1.4],[30,29,1.3],[70,29,1.3],[40,28,1],[60,28,1]]},
- {lat:"Anas profunda",g:"water",b:[E(48,44,14,6),E(62,36,5,4),Pf("M66,36 L74,38 L66,39Z"),Pf("M34,42 L28,38 L35,46Z")],t:[[44,48,100,14,.5,1.2],[52,48,80,14,-.5,1.2]],e:[[63,35,1.5],[50,41,1.2],[44,42,1.2]]},
- {lat:"Esox vorax",g:"water",b:[Pf("M14,40 Q40,28 74,34 Q84,37 88,40 Q80,44 74,44 Q40,50 14,42Z"),Pf("M15,41 L5,34 L8,47Z"),`<path d="M78,40 L86,40.5" stroke="${PAR}" stroke-width=".6"/>`],t:[[40,44,100,10,.6,1],[56,36,-70,9,.5,.9]],e:[[80,37,1.6],[66,37,1.1],[56,38,1.1],[46,39,1.1]]},
- {lat:"Sus primordialis",g:"grass",b:[E(46,44,18,10),Pf("M60,38 L76,44 L74,50 L60,52Z"),Ps("M36,52 L35,59 M44,53 L44,59 M52,53 L53,59",1.6)],t:[[74,48,-60,8,-.8,.7],[72,49,-40,8,-.8,.6],[40,35,-110,8,.5,.8],[48,34,-90,9,-.5,.8]],e:[[68,43,1.5],[46,40,1.3],[40,44,1.1]]},
- {lat:"Meles fossor",g:"rock",b:[E(48,46,16,7),Pf("M62,42 L78,47 L62,50Z"),`<path d="M63,44 L76,47 L63,46Z" fill="${PAR}"/>`],t:[[40,52,110,8,.6,.9],[56,52,70,8,-.6,.9]],e:[[69,47.5,1.3],[52,44,1.1],[44,45,1.1]]},
- {lat:"Lupus abyssalis",g:"rock",b:[E(46,40,16,7),Ps("M36,44 L35,52 M42,45 L42,52 M52,45 L53,52 M57,44 L59,51",1.4),Pf("M58,36 L72,38 L74,42 L60,42Z"),Pf("M60,36 L61,29 L64,35Z")],t:[[31,38,-170,14,.6,1.6],[58,38,-100,8,.7,.8],[56,38,-120,8,-.7,.8]],e:[[66,38.5,1.4],[48,37,1.2],[42,38,1.2]]},
- {lat:"Lynx stellifer",g:"grass",b:[E(48,46,13,8),E(62,38,6,5),Pf("M58,34 L58,26 L61,33Z"),Pf("M65,34 L67,26 L66,33Z"),Ps("M42,52 L41,59 M54,52 L55,59",1.4)],t:[[58,26,-100,6,.8,.4],[67,26,-80,6,-.8,.4],[35,46,-150,12,.7,1.2]],e:[[60,38,1.6],[64.5,38,1.6],[48,44,1.2]]},
- {lat:"Capra spiralis",g:"rock",b:[E(46,38,13,6),Ps("M38,42 L37,50 M43,43 L43,49 M50,43 L51,48 M55,42 L57,47",1.3),Ps("M56,35 Q59,30 60,27",2.4),E(61,26,4,3.4,15),Pf("M62,29 L62,34 L64,29Z")],t:[[60,23,-140,18,1.4,1.4]],e:[[63,26,1.3],[44,36,1.2],[50,37,1]]},
- {lat:"Corvus nuntius",g:"stone",b:[E(50,42,10,7,-15),E(60,33,5,5),Pf("M64,32 L73,34 L64,36Z"),Pf("M41,46 L30,54 L42,50Z"),Ps("M48,48 L47,62 M52,48 L54,62",.9)],t:[[48,38,-150,12,.6,1],[50,38,-170,10,-.4,.9]],e:[[61,32,1.5],[54,40,1.1],[48,42,1.1],[44,44,1]]},
- {lat:"Rattus legio",g:"stone",b:[E(46,55,12,6),Pf("M56,51 L68,57 L56,60Z"),`<circle cx="56" cy="50" r="2.5"/>`,E(22,58,5,3),E(78,30,4,2.5)],t:[[34,57,180,22,.7,1.2],[18,59,170,8,.6,.5],[74,31,190,8,-.6,.4]],e:[[60,55,1.2],[46,52,1],[51,52,1],[24,57,.8]]},
- {lat:"Felis noctiluca",g:"stone",b:[E(50,48,8,13),E(50,31,6,5),Pf("M45,28 L45,21 L48,27Z"),Pf("M55,28 L55,21 L52,27Z")],t:[[56,58,-20,16,-.8,1.4]],e:[[47.5,31,1.5],[52.5,31,1.5],[50,27,1.1],[50,44,1.4],[50,51,1.2]]},
- {lat:"Apis innumera",g:"grass",b:[`<ellipse cx="48" cy="25" rx="7" ry="3.2" transform="rotate(-20 48 25)" fill="${PAR}" stroke="${INK}" stroke-width=".6"/>`,`<ellipse cx="55" cy="25" rx="7" ry="3.2" transform="rotate(20 55 25)" fill="${PAR}" stroke="${INK}" stroke-width=".6"/>`,E(52,34,9,5),E(63,33,3.5,3.5),`<path d="M48,30 L48,38 M54,30 L54,38" stroke="${PAR}" stroke-width="1.4"/>`,Pf("M43,34 L36,35 L43,36Z"),`<circle cx="20" cy="20" r="1.5"/>`,`<circle cx="80" cy="46" r="1.5"/>`,`<circle cx="26" cy="44" r="1.2"/>`],t:[[50,38,100,10,.6,.7],[56,38,80,10,-.6,.7]],e:[[64,32,1.3],[61,34,1]]},
- {lat:"Natrix ophidia",g:"grass",b:[Ps("M14,56 Q26,40 38,52 T62,50 Q70,46 74,40",3.2),E(76,38,4,3,-30),Ps("M79,36 L84,33 M82,34 L84,35.5",.5)],t:[[74,36,-120,9,.7,.7],[77,35,-60,9,-.7,.7]],e:[[27,47,1.1],[38,51.5,1.1],[50,51,1.1],[62,50,1.1],[77,37.5,1.2]]}
+ {lat:"サギ",g:"water",d:[_l("M47,44 L46,59 M51,44 L53,59",1.6),_p("M34,40 Q40,28 54,32 Q60,36 56,44 Q46,48 34,40Z",WH),_p("M38,38 Q46,33 52,38 Q46,42 38,38Z","#cfd8dc"),_t("M54,34 Q62,28 59,18",3,WH),_o(60,16,5,4,WH),_p("M64,15 L77,18 L64,19Z",YE),_e(61,15,1.2),_l("M56,13 L49,11",1.2)]},
+ {lat:"カエル",g:"water",d:[_o(50,58,26,5,"#4fa84a"),_o(50,46,17,11,GRN),_o(41,34,6,6,GRN),_o(59,34,6,6,GRN),_e(41,34,2.3),_e(59,34,2.3),_l("M43,47 Q50,52 57,47",1.5),_b(38,45),_b(62,45),_o(37,55,4.5,2,GRN),_o(63,55,4.5,2,GRN)]},
+ {lat:"カワウソ",g:"water",d:[_p("M30,46 Q18,42 12,50 Q22,52 31,50Z",BR),_o(46,45,18,8,BR),_o(48,48,11,4,CRM),_o(68,38,9,8,BR),_o(73,41,4.5,3,CRM),_o(63,31,2.2,2.2,BR),_o(71,30.5,2.2,2.2,BR),_e(67,36.5,1.4),_d(77,40,1.2),_l("M75,42 l6,1 M75,43.5 l6,3",.8),_b(70,40)]},
+ {lat:"ビーバー",g:"water",d:[_p("M18,54 Q22,45 36,48 Q33,57 18,54Z","#5a3a24"),_l("M23,51 L32,49 M24,54 L33,52",.8,WH),_o(46,44,15,12,BR),_o(56,47,3,5,BR),_o(61,34,9,8,BR),_o(56,27,2.4,2.4,BR),_p("M64,38.5 L64,43 L67.5,43 L67.5,38.5Z",WH),_o(69,33,2,1.6,K),_e(62,31,1.4),_b(66,36)]},
+ {lat:"サケ",g:"water",d:[_p("M20,40 L8,30 L11,40 L8,50Z","#ff8a65"),_p("M18,40 Q40,22 66,30 Q78,34 82,40 Q78,46 66,48 Q40,56 18,40Z","#ff8a65"),_p("M30,44 Q48,51 68,46 Q50,47 30,44Z",WH),_p("M44,29 L50,21 L56,29Z","#ff8a65"),_e(72,37,1.7),_l("M64,32 Q61,39 64,46",1.2),_d(40,36,.9),_d(48,34,.9),_d(56,34.5,.9)]},
+ {lat:"カワセミ",g:"water",d:[_t("M6,47 L94,51",2.4,BR),_p("M41,40 L31,51 L44,45Z",BLU),_o(48,37,10,9,BLU),_o(50,41,6,5,"#ff9f43"),_o(56,28,6.5,6,BLU),_p("M61,26.5 L79,24.5 L61,30.5Z",K),_e(57,27,1.4),_o(58,31.5,2.2,1.4,WH),_l("M46,46 l0,3 M51,46 l0,3",1.3)]},
+ {lat:"ハリネズミ",g:"grass",d:[_p("M26,57 L23,47 L30,45 L28,37 L36,38 L37,30 L44,34 L47,26 L52,33 L58,28 L60,36 L66,34 L65,42 L70,45 L68,53 Z","#6b4a2f"),_p("M62,57 Q60,42 70,42 Q78,46 83,55 Q74,59 62,57Z",CRM),_o(83,54.5,1.7,1.5,K),_e(71,47.5,1.4),_b(74,52),_o(40,58,3.5,1.6,CRM),_o(58,58,3.5,1.6,CRM)]},
+ {lat:"リス",g:"grass",d:[_p("M46,57 Q20,60 21,37 Q23,16 40,20 Q53,24 47,34 Q40,41 47,49Z",OR),_l("M38,26 Q29,30 34,41",1.2),_o(57,47,9,11,OR),_o(59,49,5,7,"#fbe3c8"),_o(62,31,8,7,OR),_p("M58,25 L57,17 L63,23Z",OR),_e(64,30,1.6),_b(66.5,34),_d(69.5,31.5,1),_o(65,53,3,3.5,BR),_p("M61.5,51 Q65,47.5 68.5,51Z",BRD)]},
+ {lat:"フクロウ",g:"stone",d:[_t("M12,59 L88,59",2.4,BR),_o(50,39,15,18,BR),_o(50,45,9,11,CRM),_p("M38,24 L36,14 L44,21Z",BR),_p("M62,24 L64,14 L56,21Z",BR),_o(50,31,11.5,8,CRM),_o(45,30,4.3,4.3,WH),_o(55,30,4.3,4.3,WH),_e(45,30,2.3),_e(55,30,2.3),_p("M48.5,34 L51.5,34 L50,38Z",YE),_l("M46,44 l2,2 l2,-2 M50,49 l2,2 l2,-2",1),_l("M45,57 l0,2 M55,57 l0,2",1.4)]},
+ {lat:"シカ",g:"grass",d:[_l("M38,48 L37,59 M44,49 L44,59 M54,49 L55,59 M59,48 L61,59",1.8),_o(48,44,15,7,"#c77b3f"),_d(42,42,1.1,WH),_d(47,40,1.1,WH),_d(52,42,1.1,WH),_t("M58,40 Q62,34 63,28",3,"#c77b3f"),_l("M62,22 L58,12 M60,17 L55,15 M58,13 L57,8 M66,22 L70,12 M68,17 L73,15 M70,13 L71,8",1.8,BRD),_o(65,26,6,4.5,"#c77b3f",15),_p("M60,24 L56,21 L61,22Z","#c77b3f"),_e(66,25,1.2),_d(70.5,28,1),_b(67,28.5)]},
+ {lat:"ウサギ",g:"grass",d:[_p("M56,34 Q51,16 57,13 Q62,17 59.5,33Z","#e3c8a8"),_p("M61,33 Q62,15 67,15 Q70,21 63.5,34Z","#e3c8a8"),_l("M57,30 Q55,20 57.5,17 M62.5,30 Q64,21 66,19",1,PK),_o(48,48,13,9,"#e3c8a8"),_o(35,46,3,3,WH),_o(60,38,7.5,6.5,"#e3c8a8"),_o(52,56,6,2.2,"#e3c8a8"),_e(62,37,1.5),_o(66.8,39.2,1,0.9,PK),_b(62.5,41.5)]},
+ {lat:"ヒバリ",g:"sky",d:[_p("M18,30 Q34,15 49,32 Q64,15 82,30 Q65,29 51,38 Q35,29 18,30Z","#c8a27a"),_p("M47,45 L50,53 L53,45Z","#c8a27a"),_o(50,38,6,8,"#c8a27a"),_o(50,39,3.5,5,CRM),_p("M48.5,25 L50.5,19 L52,25Z","#c8a27a"),_o(50,29,4.8,4.8,"#c8a27a"),_e(48.3,28.5,1),_e(51.7,28.5,1),_p("M49,31 L50,34.5 L51,31Z",YE)]},
+ {lat:"キツネ",g:"grass",d:[_p("M37,47 Q16,49 13,34 Q24,40 38,42Z",OR),_o(16.5,37.5,4,3,WH,30),_l("M42,50 L41,59 M47,51 L47,59 M53,51 L53,59 M57,50 L58,59",1.8),_o(48,46,13,7,OR),_p("M57,34 L57,24 L63,31Z",OR),_p("M65,31 L70,22 L71,33Z",OR),_p("M55,34 Q64,29 73,34 L66,45 Q60,45 55,34Z",OR),_p("M60,39 L73,34.5 L66,45Z",WH),_d(73,35,1.3),_e(63,36,1.4)]},
+ {lat:"クマ",g:"rock",d:[_o(38,57,4.5,2.5,BR),_o(58,57,4.5,2.5,BR),_o(50,44,20,13,BR),_o(60,24,3.2,3.2,BR),_o(72,24,3.2,3.2,BR),_o(66,32,10,9,BR),_o(70.5,35.5,5,3.6,CRM),_o(73.3,34.2,1.7,1.3,K),_e(65,29.5,1.5),_b(63.5,35)]},
+ {lat:"シャモア",g:"rock",d:[_l("M40,42 L39,50 M45,43 L45,50 M51,43 L52,49 M56,42 L58,48",1.7),_o(47,39,12,6,"#9c7a5b"),_t("M56,36 Q59,31 60,27",2.6,"#9c7a5b"),_l("M59.5,24 Q59,17 56,17 M63,24 Q64,17 61,16.5",1.8),_o(61.5,27,4.6,3.6,"#9c7a5b",15),_p("M60,25 L65.5,27.5 L60,28.5Z",WH),_e(62,25.8,1.1),_d(66,29,.9)]},
+ {lat:"ワシ",g:"sky",d:[_p("M6,32 Q24,14 42,28 L50,24 L58,28 Q76,14 94,32 Q76,30 60,40 L50,46 L40,40 Q24,30 6,32Z","#7a4a26"),_l("M14,29 l2,4 M22,25 l2,5 M30,23 l2,5 M78,25 l-2,5 M86,29 l-2,4 M70,23 l-2,5",1.2,WH),_p("M45,44 L50,54 L55,44Z",WH),_o(50,22,5.5,5.5,WH),_e(47.8,21,1.1),_e(52.2,21,1.1),_p("M48.5,24 L50,29 L51.5,24Z",YE),_l("M46.5,19 l2,1 M53.5,19 l-2,1",.9)]},
+ {lat:"マーモット",g:"rock",d:[_o(50,45,10,13,"#b08354"),_o(50,48,6,8.5,CRM),_o(46,38.5,2.6,2,"#b08354"),_o(54,38.5,2.6,2,"#b08354"),_o(43,22,2.2,2.2,"#b08354"),_o(57,22,2.2,2.2,"#b08354"),_o(50,28,8,7,"#b08354"),_o(50,31,4,3,CRM),_e(47,26.5,1.3),_e(53,26.5,1.3),_o(50,29.5,1.2,1,K),_p("M49,32 L49,34.5 L51,34.5 L51,32Z",WH),_b(45,30),_b(55,30)]},
+ {lat:"コウノトリ",g:"stone",d:[_p("M38,63 L38,43 L62,43 L62,63Z","#ef5a46"),_l("M38,50 L62,50 M38,57 L62,57 M50,43 L50,50 M44,50 L44,57 M56,50 L56,57",1),_p("M35,38 L65,38 L65,43 L35,43Z","#ef5a46"),_p("M37,38 Q50,31 63,38Z","#c8a27a"),_o(50,30,10,6,WH,-10),_p("M41,31 Q47,26 55,30 Q49,34 41,31Z",K),_t("M57,28 Q61,22 59,15",2.4,WH),_o(60,14,3.8,3.1,WH),_p("M63,13 L77,16 L63,16.3Z","#ef5a46"),_e(60.5,13.3,1)]},
+ {lat:"スズメ",g:"none",d:[_p("M8,64 L50,46 L92,64Z","#ef5a46"),_l("M22,58 L78,58 M34,53 L66,53",1),_l("M46,45 l-1,-4 M52,45 l1,-4",1.3),_p("M42,36 L31,31 L40,41Z",BR),_o(50,36,10,8,BR),_o(48,39,6,4.5,CRM),_o(57,30,6,5.5,BR),_o(58.5,33,2.6,1.8,WH),_p("M62,29.5 L67.5,31 L62,32.5Z",YE),_e(58,29,1.4)]},
+ {lat:"コウモリ",g:"sky",d:[_o(84,12,6,6,YE),_p("M10,30 Q22,28 28,38 Q32,32 38,38 Q42,30 50,34 Q58,30 62,38 Q68,32 72,38 Q78,28 90,30 Q76,18 58,22 L50,18 L42,22 Q24,18 10,30Z","#7b6c99"),_p("M46,24 L45,15 L49.5,22Z","#7b6c99"),_p("M54,24 L55,15 L50.5,22Z","#7b6c99"),_o(50,30,6,8,"#7b6c99"),_e(48,27,1.2),_e(52,27,1.2),_p("M48.6,32 L49.2,34.2 L49.8,32Z",WH),_p("M50.2,32 L50.8,34.2 L51.4,32Z",WH),_b(46.5,30.5),_b(53.5,30.5)]},
+ {lat:"カモ",g:"water",d:[_p("M31,42 L24,35 L33,39Z",WH),_p("M30,44 Q32,32 50,34 Q66,34 70,42 Q66,52 46,52 Q32,52 30,44Z",WH),_p("M42,40 Q50,36 58,42 Q50,46 42,40Z","#cfd8dc"),_t("M62,36 Q63,33 64,31",3,WH),_o(64,28,7,6,"#3c8a2c"),_p("M70,27.5 L79.5,29 L70,32Z",YE),_e(65.5,26.5,1.4),_b(66,31.5)]},
+ {lat:"カワカマス",g:"water",d:[_p("M12,40 L3,32 L5,40 L3,48Z",GRN),_p("M22,36 L28,29 L32,35Z",GRN),_p("M10,40 Q40,28 78,34 Q88,37 93,40 Q86,44 78,45 Q40,52 10,40Z",GRN),_p("M24,43 Q50,48 80,43 Q50,45 24,43Z","#d8f0c8"),_d(30,38,1.1,WH),_d(40,36,1.1,WH),_d(50,36,1.1,WH),_d(60,37,1.1,WH),_l("M83,41 l1.2,1.4 l1.2,-1.4 l1.2,1.4 l1.2,-1.4",.8),_e(80,37,1.6),_l("M77,34 L83.5,35.5",1.4)]},
+ {lat:"イノシシ",g:"grass",d:[_o(38,56,3.5,3,"#5a3a24"),_o(54,56,3.5,3,"#5a3a24"),_o(46,45,18,11,"#5a3a24"),_p("M34,35 L36,31 L39,34 L41,30 L44,33 L46,29 L49,33 L51,30 L53,34Z","#5a3a24"),_p("M60,36 L76,42 L75,52 L60,54 Z","#5a3a24"),_p("M60,36 L63,30 L66,38Z","#5a3a24"),_o(76,47,3,4,"#e8a3a3"),_d(75.2,46,.6),_d(76.8,48,.6),_p("M70,51 Q72,56 77,54.5 Q73.5,53.5 72.5,50Z",WH),_e(67,42,1.4)]},
+ {lat:"アナグマ",g:"rock",d:[_o(38,56,3.5,2.5,"#3a3a3a"),_o(54,56,3.5,2.5,"#3a3a3a"),_o(47,48,17,8,"#9aa0a6"),_o(62,41,2.2,2.2,WH),_p("M60,40 Q72,40 83,49 Q72,57 60,54Z",WH),_p("M61,42.5 Q71,43 80,47.5 L79,49 Q70,46.5 61,46Z",K),_p("M61,51.5 Q70,52 79,50.5 L80,49.5 Q71,54 61,53.5Z",K),_d(70,46,.9,WH),_o(82,49,1.6,1.3,K)]},
+ {lat:"オオカミ",g:"rock",d:[_o(90,9,5,5,YE),_p("M31,40 Q19,33 17,44 Q26,45 32,44Z","#8e99a3"),_l("M36,44 L35,52 M42,45 L42,52 M52,45 L53,52 M57,44 L59,51",1.8),_o(46,42,16,8,"#8e99a3"),_t("M58,38 Q62,30 64,24",3.5,"#8e99a3"),_p("M60,22 L58,13 L64,19Z","#8e99a3"),_p("M58,23 L77,13 L73,22 L63,28Z","#8e99a3"),_p("M66,22 L77,13.5 L73,22Z","#dfe3e6"),_l("M62.5,20.5 q1.5,1.2 3,0",1.1),_d(77,13.6,1.1)]},
+ {lat:"オオヤマネコ",g:"grass",d:[_o(34.5,44,3,2.2,K),_l("M42,52 L41,59 M54,52 L55,59",1.8),_o(48,47,13,8,"#d9b382"),_d(42,45,1,"#7a5a36"),_d(47,49,1,"#7a5a36"),_d(52,44,1,"#7a5a36"),_p("M57,31 L56,21 L61.5,28Z","#d9b382"),_p("M66,28.5 L69,20.5 L69.5,31Z","#d9b382"),_l("M56,21 l0,-4 M69,20.5 l0,-4",1.3),_p("M54,38 Q55,29 62,29 Q70,29 70,38 L66,44 L62,42 L58,44Z","#d9b382"),_e(59.5,35,1.4),_e(65,35,1.4),_d(62.3,38.2,1,PK),_l("M62.3,39 q-1.5,1.6 -3,.4 M62.3,39 q1.5,1.6 3,.4",.9)]},
+ {lat:"アイベックス",g:"rock",d:[_l("M39,43 L38,50 M44,44 L44,50 M50,44 L51,49 M55,43 L57,48",1.7),_o(46,40,13,6,"#a58b6f"),_t("M56,37 Q59,32 60,28",2.6,"#a58b6f"),_t("M60,24 Q53,5 39,13",2.6,"#e2d2b4"),_l("M57,18 l2.5,-1.5 M54,13 l2,-2.5 M50,10.5 l1,-3",1),_o(61.5,28,4.6,3.6,"#a58b6f",15),_p("M62,31 L61.5,36 L64,31Z","#a58b6f"),_e(62,26.8,1.1),_d(66,30,.9)]},
+ {lat:"カラス",g:"stone",d:[_l("M48,47 L47,62 M52,47 L54,62",1.5),_p("M40,45 L28,54 L42,49Z","#2b2b2b"),_o(50,40,11,9,"#2b2b2b",-15),_l("M44,38 Q50,36 55,41",1,"#6b6b6b"),_o(60,31,6.5,6,"#2b2b2b"),_p("M65,29.5 L76,32 L65,34.5Z","#5a5a5a"),_o(61,30,2,2,WH),_e(61.3,30,1.1)]},
+ {lat:"ネズミ",g:"stone",d:[_t("M36,55 Q22,60 17,50 Q14,42 22,41",1.2,PK),_p("M78,62 L93,62 L93,53Z",YE),_d(88,59,1,"#c99b12"),_d(91,56.5,.8,"#c99b12"),_o(48,53,13,7,"#9aa0a6"),_p("M58,47 Q66,45 75,53 Q66,58 58,57Z","#9aa0a6"),_o(60,45,3.8,3.8,"#9aa0a6"),_o(60,45,2,2,PK),_o(75,53,1.3,1.1,PK),_e(65.5,50,1.3),_l("M72,55 l6,2 M72,54 l6,-1",.7),_b(67,54)]},
+ {lat:"ネコ",g:"stone",d:[_o(84,12,6,6,YE),_t("M60,59 Q73,59 71,47 Q70,40 75,38",2.6,"#2b2b2b"),_p("M40,61 Q37,41 50,38 Q63,41 60,61Z","#2b2b2b"),_p("M43,25 L42,15 L48.5,22Z","#2b2b2b"),_p("M57,25 L58,15 L51.5,22Z","#2b2b2b"),_o(50,30,9.5,8,"#2b2b2b"),_o(46.3,30,2.3,2.7,YE),_o(53.7,30,2.3,2.7,YE),`<ellipse cx="46.3" cy="30" rx=".6" ry="2" fill="${K}"/>`,`<ellipse cx="53.7" cy="30" rx=".6" ry="2" fill="${K}"/>`,_d(50,34,.9,PK),_l("M45,35 l-6,1 M55,35 l6,1",.7,"#bbbbbb")]},
+ {lat:"ハチ",g:"grass",d:[_l("M24,61 L24,44",1.6,"#3c8a2c"),_o(19.5,40,3.5,3.5,WH),_o(28.5,40,3.5,3.5,WH),_o(24,35.5,3.5,3.5,WH),_o(24,44.5,3.5,3.5,WH),_o(24,40,2.6,2.6,YE),`<path d="M30,30 Q36,22 42,30" fill="none" stroke="${K}" stroke-width="1" stroke-dasharray="1.5 2"/>`,_o(49,27,7.5,5,"#dff1fb",-20),_o(59,27,7.5,5,"#dff1fb",20),_p("M43,38 L37,39 L43,40Z",K),_o(54,38,11,8,YE),_p("M49.5,30.8 Q47.5,38 49.5,45.2 L53,45.9 Q51,38 53,30.2Z",K),_p("M56.8,30.3 Q54.8,38 56.8,45.8 L60.2,45 Q58.2,38 60.2,31.2Z",K),_o(66,36,5,5,"#2b2b2b"),_l("M67,31.5 Q68,26 71,25 M64.5,31.5 Q64,26 66,24",1),_o(67.5,35.2,1.6,1.6,WH),_e(67.7,35.2,.9),_b(68.5,38.5)]},
+ {lat:"ヘビ",g:"grass",d:[_t("M12,55 Q24,38 36,50 T60,50 Q70,44 72,37",4.6,GRN),_d(24,46,.9),_d(36,50.5,.9),_d(48,50,.9),_d(60,50,.9),_d(68,44,.9),_l("M79,30.5 L84.5,27 M82.5,28.3 L85,29.8",.9,"#ef5a46"),_o(75,33,5.5,4.2,GRN,-30),_e(76.3,31.8,1.3),_b(76,35.5)]}
 ];
 function artSvg(id){
-  const a=ART[id], sig=`<g stroke="${RUST}" stroke-width=".6" fill="none" opacity=".35"><circle cx="50" cy="35" r="25"/><circle cx="50" cy="35" r="22"/><path d="M50,13 L50,57 M50,24 L41,16 M50,24 L59,16 M50,32 L38,26 M50,32 L62,26 M50,40 L42,48 M50,40 L58,48"/></g>`;
-  const moon=`<path d="M89,9 a5,5 0 1,0 3,8 a4,4 0 1,1 -3,-8Z" fill="${GOLD}"/>`;
-  return `<svg class="art" viewBox="0 0 100 70" aria-hidden="true"><rect width="100" height="70" fill="url(#parch)"/>${sig}${moon}<g filter="url(#rough)" fill="${INK}">${GROUND[a.g]||""}${a.b.join("")}${a.t.map(x=>tent(...x)).join("")}${a.e.map(x=>eye(...x)).join("")}</g><rect x="1.5" y="1.5" width="97" height="67" fill="none" stroke="${INK}" stroke-width="1"/><rect x="3.3" y="3.3" width="93.4" height="63.4" fill="none" stroke="${RUST}" stroke-width=".45"/></svg>`;
+  const a=ART[id];
+  return `<svg class="art" viewBox="0 0 100 70" aria-hidden="true"><rect width="100" height="70" fill="${HAB[a.g]}"/><path d="M52,0 L100,0 L100,48Z" fill="url(#tone)"/>${GROUND[a.g]}${a.d.join("")}</svg>`;
 }
 
 function cardHtml(id, opts){
@@ -649,7 +752,7 @@ function render(){
   const xs=CELLS.map(c=>c.x), ys=CELLS.map(c=>c.y);
   let bsvg=`<svg viewBox="${Math.min(...xs)-1.1} ${Math.min(...ys)-1.3} ${Math.max(...xs)-Math.min(...xs)+2.2} ${Math.max(...ys)-Math.min(...ys)+2.5}" role="img" aria-label="Plateau de ${esc(viewP.name)}">`;
   CELLS.forEach(c=>{ const cl=legal.has(c.id)?"legal":tg.has(c.id)?"target":"";
-    bsvg+=`<g data-cell="${c.id}"><polygon class="cell ${cl}" points="${hexPts(c.x,c.y,.97)}"/>${stackSvg(viewP.board[c.id].s,c.x,c.y,1,viewP.board[c.id].cube)}</g>`; });
+    bsvg+=`<g data-cell="${c.id}"><polygon class="cell ${cl}" points="${hexPts(c.x,c.y,1)}"/>${stackSvg(viewP.board[c.id].s,c.x,c.y,1,viewP.board[c.id].cube)}</g>`; });
   bsvg+="</svg>";
 
   let guide;
@@ -751,10 +854,10 @@ function riverMap(p){
   const path=riverPath(p), on=new Map(path.map((id,i)=>[id,i+1])), K=p.board.map(c=>kind(c.s));
   const xs=CELLS.map(c=>c.x), ys=CELLS.map(c=>c.y);
   let o=`<svg viewBox="${Math.min(...xs)-1.1} ${Math.min(...ys)-1.2} ${Math.max(...xs)-Math.min(...xs)+2.2} ${Math.max(...ys)-Math.min(...ys)+2.4}" role="img" aria-label="Trajet compté de la rivière">`;
-  CELLS.forEach(c=>{ o+=`<polygon class="cell" points="${hexPts(c.x,c.y,.97)}"/>${stackSvg(p.board[c.id].s,c.x,c.y,1,p.board[c.id].cube)}`; });
+  CELLS.forEach(c=>{ o+=`<polygon class="cell" points="${hexPts(c.x,c.y,1)}"/>${stackSvg(p.board[c.id].s,c.x,c.y,1,p.board[c.id].cube)}`; });
   if(path.length>1) o+=`<polyline class="pth" points="${path.map(i=>CELLS[i].x+","+CELLS[i].y).join(" ")}"/>`;
-  CELLS.forEach(c=>{ if(on.has(c.id)) o+=`<polygon points="${hexPts(c.x,c.y,.9)}" fill="none" stroke="var(--hi)" stroke-width=".12"/><text x="${c.x}" y="${c.y+.22}" text-anchor="middle">${on.get(c.id)}</text>`;
-    else if(K[c.id].t==="water") o+=`<polygon class="off" points="${hexPts(c.x,c.y,.86)}"/>`; });
+  CELLS.forEach(c=>{ if(on.has(c.id)) o+=`<polygon points="${hexPts(c.x,c.y,.84)}" fill="none" stroke="var(--hi)" stroke-width=".12"/><text x="${c.x}" y="${c.y+.22}" text-anchor="middle">${on.get(c.id)}</text>`;
+    else if(K[c.id].t==="water") o+=`<polygon class="off" points="${hexPts(c.x,c.y,.8)}"/>`; });
   return `<div class="rmap">${o}</svg></div><p class="note" style="margin:0 0 6px">Numérotés : les jetons comptés, du plus court chemin entre les deux bouts les plus éloignés. En pointillé : les jetons bleus qui ne comptent pas. Deux jetons non consécutifs qui se touchent créent un raccourci et réduisent la longueur.</p>`;
 }
 function showDetail(){
@@ -797,7 +900,7 @@ function svgEl(tag,attrs,text){ const e=document.createElementNS(NS,tag); Object
 function finaleBoard(p,i){
   const xs=CELLS.map(c=>c.x), ys=CELLS.map(c=>c.y);
   let o=`<svg viewBox="${Math.min(...xs)-1.1} ${Math.min(...ys)-2.3} ${Math.max(...xs)-Math.min(...xs)+2.2} ${Math.max(...ys)-Math.min(...ys)+3.5}" role="img" aria-label="Plateau de ${esc(p.name)}" overflow="visible">`;
-  CELLS.forEach(c=>{ o+=`<polygon class="cell" points="${hexPts(c.x,c.y,.97)}"/>${stackSvg(p.board[c.id].s,c.x,c.y,1,p.board[c.id].cube)}`; });
+  CELLS.forEach(c=>{ o+=`<polygon class="cell" points="${hexPts(c.x,c.y,1)}"/>${stackSvg(p.board[c.id].s,c.x,c.y,1,p.board[c.id].cube)}`; });
   return o+`<g id="fo-${i}"></g><g id="fp-${i}"></g></svg>`;
 }
 function finaleHtml(){
@@ -819,7 +922,7 @@ function tweenNum(el,from,to){
 }
 function reveal(i,item){
   const p=S.players[i], fo=document.getElementById("fo-"+i), fp=document.getElementById("fp-"+i); if(!fo) return;
-  item.cells.forEach((c,j)=>{ const C=CELLS[c]; fo.appendChild(svgEl("polygon",{class:"fol"+(item.v?"":" fz"),points:hexPts(C.x,C.y,.9),style:item.seq?`animation-delay:${j*70}ms`:""})); });
+  item.cells.forEach((c,j)=>{ const C=CELLS[c]; fo.appendChild(svgEl("polygon",{class:"fol"+(item.v?"":" fz"),points:hexPts(C.x,C.y,.86),style:item.seq?`animation-delay:${j*70}ms`:""})); });
   const C=CELLS[item.at], n=p.board[item.at].s.length;
   fp.appendChild(svgEl("text",{class:"pop"+(item.v?"":" zero")+(item.seq?" big":""),x:C.x,y:C.y-Math.max(0,n-1)*.2-.45,style:item.seq?`animation-delay:${item.cells.length*70}ms`:""},item.v?"+"+item.v:"0"));
   if(item.v){ const el=document.getElementById("ft-"+i), from=fin.tot[i]; fin.tot[i]+=item.v; tweenNum(el,from,fin.tot[i]); }
