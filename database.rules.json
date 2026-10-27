@@ -1,0 +1,16 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "games": {
+      "$code": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        ".validate": "$code.matches(/^[A-Z0-9]{5}$/)",
+        "state": {
+          ".validate": "newData.isString() && newData.val().length < 500000"
+        }
+      }
+    }
+  }
+}
