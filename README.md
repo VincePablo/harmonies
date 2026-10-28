@@ -90,6 +90,7 @@ Bon à savoir :
 - Si un joueur est parti, l'hôte peut le remplacer par un bot à son tour, avec le bouton **Faire jouer un bot à sa place**.
 - Les bots tournent sur l'appareil de l'hôte : il doit garder la page ouverte pendant la partie.
 - Le mode **Sur cet appareil** fonctionne toujours, même sans Firebase.
+- **Être prévenu à son tour** : dans la salle d'attente, clique sur **Me prévenir quand c'est mon tour** et autorise les notifications. Quand c'est ton tour, un son retentit, le téléphone vibre et, si l'onglet est en arrière-plan, une notification s'affiche et le titre de l'onglet clignote. La page du jeu doit rester ouverte : sur téléphone, le navigateur peut la mettre en pause si tu changes d'appli trop longtemps. Sur iPhone, les notifications ne marchent que si le site a été ajouté à l'écran d'accueil.
 
 ## En cas de problème
 

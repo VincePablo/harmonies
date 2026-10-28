@@ -773,7 +773,7 @@ function render(){
   app.innerHTML=`
   <div class="top"><h1>Harmo<span>nies</span></h1>
     <div class="meta">${NET.on?`<span>Partie en ligne <b>${NET.code}</b></span>`:""}<span>Tour ${S.round}</span><span>Sac : ${S.bag.length} jetons</span><span>Face ${S.side} · ${S.side==="A"?"rivière":"îles"}</span>${S.endTriggered&&!S.over?`<span class="lastbadge">Dernier tour${S.endReason?" · "+esc(S.endReason):""}</span>`:""}</div>
-    <div class="tools">${S.over?`<button class="btn" data-a="finale">Revoir le décompte</button>`:""}<button class="btn" data-a="rules">Règles</button><button class="btn" data-a="new">${NET.on?"Quitter la partie":"Nouvelle partie"}</button></div></div>
+    <div class="tools">${S.over?`<button class="btn" data-a="finale">Revoir le décompte</button>`:""}<button class="btn" data-a="rules">Règles</button>${NET.on&&notifAsk()?`<button class="btn" data-a="onotif">Activer les notifications</button>`:""}<button class="btn" data-a="new">${NET.on?"Quitter la partie":"Nouvelle partie"}</button></div></div>
   <div class="bar">${S.players.map((pl,i)=>`<button class="chip ${i===S.cur&&!S.over?"cur":""} ${i===S.view?"view":""}" data-a="view" data-i="${i}"><span class="dot"></span>${esc(pl.name)}${isBot(pl)?` <span class="tag">${LV[pl.bot]}</span>`:""}${NET.on&&pl.uid===NET.me?' <span class="tag">toi</span>':""}${NET.on&&!isBot(pl)&&pl.uid&&!pres[pl.uid]?' <span class="tag">hors ligne</span>':""}${S.over?` <b>${score(pl,S.side).total}</b>`:""}</button>`).join("")}</div>
   <section class="panel offer"><div class="label"><span>Offre de jetons</span><span>3 par lot</span></div>
     <div class="slots">${S.central.map((s,i)=>`<button class="slot" data-a="pick" data-i="${i}" ${(!s||!me||t.picked!==null)?"disabled":""} aria-label="Lot ${i+1}">${s?tokSvg(s,28):"<span class='note'>vide</span>"}</button>`).join("")}</div></section>
@@ -1028,7 +1028,7 @@ async function netJoin(code,silent){
 }
 function netEnter(code){
   botGen++; clearTimeout(botTimer); botTimer=null; closeFinale(); endFx();
-  Object.assign(NET,{on:true,code,ref:gref(code),v:0,lastPushed:null,pending:false,dirty:false,game:null});
+  Object.assign(NET,{on:true,code,ref:gref(code),v:0,lastPushed:null,pending:false,dirty:false,game:null,lastTurnKey:undefined});
   S=null; setup.err="";
   try{ localStorage.setItem("harmonies-online",code); }catch(e){}
   try{ history.replaceState(null,"",location.pathname+location.search+"#"+code); }catch(e){}
@@ -1067,8 +1067,60 @@ function applyRemote(g){
   if(!wasTrig && S.endTriggered && !S.over) lastRoundFx(String(S.endReason||"").startsWith("Le sac"), S.players.length-S.cur);
   if(!wasOver && S.over) startFinale();
   maybeBot();
+  checkTurn();
 }
-function netPush(){ NET.dirty=true; if(!NET.pending) netFlush(); }
+function netPush(){ NET.dirty=true; if(!NET.pending) netFlush(); checkTurn(); }
+
+// ---------- Prévenir le joueur à son tour ----------
+const BASE_TITLE=document.title||"Harmonies";
+let actx=null, flashT=null, swReg=null;
+document.addEventListener("pointerdown",()=>{ try{ if(!actx) actx=new (window.AudioContext||window.webkitAudioContext)(); else if(actx.state==="suspended") actx.resume(); }catch(e){} },{passive:true});
+try{ if("serviceWorker" in navigator && /^https?:/.test(location.protocol)) navigator.serviceWorker.register("sw.js").then(r=>{ swReg=r; }).catch(()=>{}); }catch(e){}
+const notifSupported=()=>"Notification" in window;
+const notifAsk=()=>notifSupported()&&Notification.permission==="default";
+const notifOK=()=>notifSupported()&&Notification.permission==="granted";
+function ding(){
+  if(!actx) return;
+  try{ const t=actx.currentTime;
+    [[784,0],[1175,.15]].forEach(([f,d])=>{ const o=actx.createOscillator(), g=actx.createGain(); o.type="triangle"; o.frequency.value=f;
+      g.gain.setValueAtTime(0,t+d); g.gain.linearRampToValueAtTime(.22,t+d+.02); g.gain.exponentialRampToValueAtTime(.001,t+d+.4);
+      o.connect(g); g.connect(actx.destination); o.start(t+d); o.stop(t+d+.45); });
+  }catch(e){}
+}
+function showNotif(title,body){
+  if(!notifOK()) return;
+  const opt={body,tag:"harmonies-tour",renotify:true};
+  try{ if(swReg&&swReg.showNotification){ swReg.showNotification(title,opt); return; } const n=new Notification(title,opt); n.onclick=()=>{ window.focus(); n.close(); }; }
+  catch(e){ try{ if(swReg) swReg.showNotification(title,opt); }catch(_){} }
+}
+function flashTitle(){
+  clearInterval(flashT); let on=true; document.title="(!) À toi de jouer";
+  flashT=setInterval(()=>{ on=!on; document.title=on?"(!) À toi de jouer":BASE_TITLE; },1000);
+}
+document.addEventListener("visibilitychange",()=>{ if(!document.hidden){ clearInterval(flashT); flashT=null; document.title=BASE_TITLE; } });
+function notifyTurn(){
+  ding();
+  try{ if(navigator.vibrate) navigator.vibrate([120,60,120]); }catch(e){}
+  if(document.hidden){ flashTitle(); showNotif("À toi de jouer !",`${P().name}, c'est ton tour dans la partie ${NET.code}.`); }
+}
+function checkTurn(){
+  if(!NET.on||!S||S.over) return;
+  const mine=!isBot(P()) && P().uid===NET.me && S.turn.picked===null, key=S.round+":"+S.cur;
+  if(NET.lastTurnKey===undefined){ NET.lastTurnKey=mine?key:null; if(mine&&document.hidden) notifyTurn(); return; }
+  if(mine && key!==NET.lastTurnKey){ NET.lastTurnKey=key; notifyTurn(); }
+}
+async function askNotif(){
+  if(!notifSupported()) return;
+  try{ await Notification.requestPermission(); }catch(e){}
+  if(notifOK()) showNotif("Notifications activées","Tu seras prévenu ici quand ce sera ton tour.");
+  if(modal==="lobby") showLobby(); render();
+}
+function notifLine(){
+  if(!notifSupported()) return `<p class="note" style="margin:0">Ce navigateur ne propose pas de notifications : garde l'onglet ouvert, un son te préviendra à ton tour.</p>`;
+  if(Notification.permission==="granted") return `<p class="note" style="margin:0">Notifications activées : tu seras prévenu à ton tour, même dans un autre onglet.</p>`;
+  if(Notification.permission==="denied") return `<p class="note" style="margin:0">Les notifications sont bloquées pour ce site. Tu peux les autoriser dans les réglages du navigateur (icône à gauche de l'adresse).</p>`;
+  return `<button class="btn" data-a="onotif">Me prévenir quand c'est mon tour</button>`;
+}
 function netFlush(){
   if(!NET.on||!S) { NET.dirty=false; return; }
   NET.dirty=false; NET.pending=true;
@@ -1088,6 +1140,7 @@ function showLobby(){
    <p style="margin:0">Envoie ce lien à tes copains, ou donne-leur le code :</p>
    <div class="linkrow"><input id="olink" readonly value="${esc(link)}" aria-label="Lien de la partie"><button class="btn" data-a="ocopy">Copier</button></div>
    <div class="rank">${seats.map((x,i)=>`<div><span>${x.type==="bot"?`${esc(x.name)} <span class="tag">Bot ${LV[x.lv].toLowerCase()}</span>`: x.uid?`${esc(x.name||"Joueur")}${x.uid===NET.me?' <span class="tag">toi</span>':""}${x.uid===g.host?' <span class="tag">hôte</span>':""}${pres[x.uid]?"":' <span class="tag">hors ligne</span>'}`:`<span class="note" style="margin:0">Place libre, en attente d'un ami…</span>`}</span>${NET.host&&x.type==="human"&&!x.uid?`<button class="btn" data-a="obot" data-i="${i}">Mettre un bot</button>`:""}</div>`).join("")}</div>
+   ${notifLine()}
    <p class="note" style="margin:0">${full?(NET.host?"Tout le monde est là, tu peux lancer la partie.":"Tout le monde est là. L'hôte va lancer la partie."):"La partie peut commencer quand toutes les places sont prises."}</p>
    <div class="tools">${NET.host?`<button class="btn primary" data-a="ostart" ${full?"":"disabled"}>Lancer la partie</button>`:""}<button class="btn" data-a="oleave">Quitter</button></div>`);
 }
@@ -1203,6 +1256,7 @@ document.addEventListener("click",e=>{
     case "ocopy": { const inp=document.getElementById("olink"); const done=()=>{ el.textContent="Copié"; }; try{ navigator.clipboard.writeText(inp.value).then(done,()=>inp.select()); }catch(err){ inp.select(); } break; }
     case "obot": if(NET.host) NET.ref.child("seats/"+i).set({type:"bot",lv:1,uid:"",name:BOTNAME[1]+" "+(+i+1)}); break;
     case "ostart": netStart(); break;
+    case "onotif": askNotif(); break;
     case "oleave": netLeave(); setup.err=""; showSetup(); break;
     case "otakeover": if(NET.on&&NET.host&&S&&!S.over&&!isBot(P())){ P().bot=1; commit(); } break;
     case "fskip": if(fin){ fin.skip=true; finishFinale(); } break;
