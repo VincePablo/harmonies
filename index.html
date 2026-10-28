@@ -121,6 +121,9 @@ h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance}
 .linkrow{display:flex;gap:8px}
 .linkrow input{flex:1;min-width:0;font:inherit;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
 .bigcode{font-family:var(--f-display);font-weight:800;font-size:40px;letter-spacing:.12em;color:var(--accent)}
+.rk{font-family:var(--f-display);font-weight:400;display:inline-grid;place-items:center;min-width:26px;height:26px;border:2px solid var(--ink);border-radius:50%;background:#fff;font-size:12px}
+.rk.r1{background:var(--hi)}
+.dtab tr.me td{background:#fff6cc}
 .rank{display:grid;gap:8px}
 .rank div{display:flex;justify-content:space-between;border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-weight:600}
 .rank div:first-child{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent)}
@@ -455,7 +458,7 @@ function draw3(){ return S.bag.length>=3 ? S.bag.splice(0,3) : null; }
 
 function newGame(){
   const bag=[]; Object.entries(BAG).forEach(([c,n])=>{ for(let i=0;i<n;i++) bag.push(c); });
-  S={ side:setup.side, bag:shuffle(bag), deck:shuffle(CARDS.map((_,i)=>i)), central:[], display:[], cur:0, view:0, round:1, endTriggered:false, over:false,
+  S={ gid:Date.now().toString(36)+Math.random().toString(36).slice(2,6), side:setup.side, bag:shuffle(bag), deck:shuffle(CARDS.map((_,i)=>i)), central:[], display:[], cur:0, view:0, round:1, endTriggered:false, over:false,
       players:setup.names.slice(0,setup.n).map((n,i)=>{ const bot=setup.types[i]==="bot"?setup.lv[i]:null; return {name:(n||"").trim()||(bot!=null?BOTNAME[bot]:"Joueur "+(i+1)), bot, uid:(setup.uids&&setup.uids[i])||null, board:CELLS.map(()=>({s:[],cube:null})), cards:[], done:[], cubes:0}; }) };
   for(let i=0;i<nSlots();i++) S.central.push(draw3());
   for(let i=0;i<nSlots();i++) S.display.push(S.deck.shift());
@@ -513,7 +516,7 @@ function endTurn(){
     const rb= left===0 ? `le plateau de ${p.name} est plein` : `le plateau de ${p.name} n'a plus que ${left} case${left>1?"s":""} libre${left>1?"s":""}`;
     S.endReason = bagOut && full ? `Le sac est vide et ${rb}` : bagOut ? "Le sac est vide" : rb.charAt(0).toUpperCase()+rb.slice(1);
   }
-  if(S.endTriggered && S.cur===S.players.length-1){ S.over=true; S.turn={picked:null,hand:[],sel:null}; commit(); startFinale(); return; }
+  if(S.endTriggered && S.cur===S.players.length-1){ S.over=true; S.turn={picked:null,hand:[],sel:null}; commit(); startFinale(); saveRecord(); return; }
   const remaining=S.players.length-1-S.cur;
   S.cur=(S.cur+1)%S.players.length; if(S.cur===0) S.round++;
   S.view=S.cur; startTurn();
@@ -773,7 +776,7 @@ function render(){
   app.innerHTML=`
   <div class="top"><h1>Harmo<span>nies</span></h1>
     <div class="meta">${NET.on?`<span>Partie en ligne <b>${NET.code}</b></span>`:""}<span>Tour ${S.round}</span><span>Sac : ${S.bag.length} jetons</span><span>Face ${S.side} · ${S.side==="A"?"rivière":"îles"}</span>${S.endTriggered&&!S.over?`<span class="lastbadge">Dernier tour${S.endReason?" · "+esc(S.endReason):""}</span>`:""}</div>
-    <div class="tools">${S.over?`<button class="btn" data-a="finale">Revoir le décompte</button>`:""}<button class="btn" data-a="rules">Règles</button>${NET.on&&notifAsk()?`<button class="btn" data-a="onotif">Activer les notifications</button>`:""}<button class="btn" data-a="new">${NET.on?"Quitter la partie":"Nouvelle partie"}</button></div></div>
+    <div class="tools">${S.over?`<button class="btn" data-a="finale">Revoir le décompte</button>`:""}${FB_OK?`<button class="btn" data-a="records">Records</button>`:""}<button class="btn" data-a="rules">Règles</button>${NET.on&&notifAsk()?`<button class="btn" data-a="onotif">Activer les notifications</button>`:""}<button class="btn" data-a="new">${NET.on?"Quitter la partie":"Nouvelle partie"}</button></div></div>
   <div class="bar">${S.players.map((pl,i)=>`<button class="chip ${i===S.cur&&!S.over?"cur":""} ${i===S.view?"view":""}" data-a="view" data-i="${i}"><span class="dot"></span>${esc(pl.name)}${isBot(pl)?` <span class="tag">${LV[pl.bot]}</span>`:""}${NET.on&&pl.uid===NET.me?' <span class="tag">toi</span>':""}${NET.on&&!isBot(pl)&&pl.uid&&!pres[pl.uid]?' <span class="tag">hors ligne</span>':""}${S.over?` <b>${score(pl,S.side).total}</b>`:""}</button>`).join("")}</div>
   <section class="panel offer"><div class="label"><span>Offre de jetons</span><span>3 par lot</span></div>
     <div class="slots">${S.central.map((s,i)=>`<button class="slot" data-a="pick" data-i="${i}" ${(!s||!me||t.picked!==null)?"disabled":""} aria-label="Lot ${i+1}">${s?tokSvg(s,28):"<span class='note'>vide</span>"}</button>`).join("")}</div></section>
@@ -968,7 +971,7 @@ function finishFinale(){
   S.players.forEach((_,i)=>{ document.getElementById("fo-"+i).innerHTML=""; document.getElementById("fp-"+i).innerHTML=""; });
   document.getElementById("fSkip").hidden=true;
   const fe=document.getElementById("fEnd"); fe.hidden=false;
-  fe.innerHTML=`${S.endReason?`<span class="note" style="margin:0">Fin déclenchée : ${esc(S.endReason.charAt(0).toLowerCase()+S.endReason.slice(1))}.</span>`:""}<div class="tools"><button class="btn primary" data-a="new">Rejouer</button><button class="btn" data-a="finale">Revoir le décompte</button><button class="btn" data-a="fclose">Retour à la partie</button></div>`;
+  fe.innerHTML=`<span class="note" id="fRec" style="margin:0;font-weight:700;color:var(--ink)">${esc(REC.msg||"")}</span>${S.endReason?`<span class="note" style="margin:0">Fin déclenchée : ${esc(S.endReason.charAt(0).toLowerCase()+S.endReason.slice(1))}.</span>`:""}<div class="tools"><button class="btn primary" data-a="new">Rejouer</button><button class="btn" data-a="finale">Revoir le décompte</button><button class="btn" data-a="fclose">Retour à la partie</button></div>`;
 }
 function closeFinale(){ fin=null; const f=document.getElementById("finale"); if(f) f.innerHTML=""; }
 
@@ -1065,7 +1068,7 @@ function applyRemote(g){
   if(modal==="lobby"||modal==="setup") closeModal();
   render();
   if(!wasTrig && S.endTriggered && !S.over) lastRoundFx(String(S.endReason||"").startsWith("Le sac"), S.players.length-S.cur);
-  if(!wasOver && S.over) startFinale();
+  if(!wasOver && S.over){ startFinale(); saveRecord(); }
   maybeBot();
   checkTurn();
 }
@@ -1114,6 +1117,58 @@ async function askNotif(){
   try{ await Notification.requestPermission(); }catch(e){}
   if(notifOK()) showNotif("Notifications activées","Tu seras prévenu ici quand ce sera ton tour.");
   if(modal==="lobby") showLobby(); render();
+}
+// ---------- Records partagés ----------
+const REC={mode:"online",side:"A",msg:"",done:new Set()};
+try{ JSON.parse(localStorage.getItem("harmonies-rec-done")||"[]").forEach(k=>REC.done.add(k)); }catch(e){}
+function setRecMsg(m){ REC.msg=m; const el=document.getElementById("fRec"); if(el) el.textContent=m; }
+async function saveRecord(){
+  if(!FB_OK||!S||!S.over) return;
+  let mode, seat;
+  if(NET.on){ mode="online"; seat=S.players.findIndex(x=>x.uid===NET.me&&!isBot(x)); }
+  else if(S.players.length===1&&!isBot(S.players[0])){ mode="solo"; seat=0; }
+  else return;
+  if(seat<0) return;
+  const pl=S.players[seat], pts=score(pl,S.side).total, board=mode+"_"+S.side;
+  const key=`${S.gid||NET.code||"g"+S.round+"x"+S.bag.length}_${seat}`;
+  if(REC.done.has(board+"/"+key)) return;
+  setRecMsg("Enregistrement du score…");
+  try{
+    await fb();
+    await firebase.database().ref(`records/${board}/${key}`).set({name:String(pl.name).slice(0,16),uid:NET.me,score:pts,cubes:pl.cubes||0,players:S.players.length,date:Date.now()});
+    REC.done.add(board+"/"+key); try{ localStorage.setItem("harmonies-rec-done",JSON.stringify([...REC.done].slice(-200))); }catch(e){}
+    const snap=await firebase.database().ref("records/"+board).orderByChild("score").limitToLast(50).once("value");
+    let better=0, n=0; snap.forEach(c=>{ n++; if(c.val().score>pts) better++; });
+    const lbl=(mode==="online"?"en ligne":"en solo")+", face "+S.side;
+    setRecMsg(better===0?`Nouveau record ${lbl} !`: better<50?`Score enregistré : ${better+1}e meilleur score ${lbl}.`:`Score enregistré dans les records ${lbl}.`);
+  }catch(e){ setRecMsg("Le score n'a pas pu être enregistré : les règles Firebase doivent être mises à jour (voir le guide)."); }
+}
+function recClose(){ closeModal(); if(!S&&!NET.on) showSetup(); else if(NET.on&&!S&&NET.game) showLobby(); }
+async function showRecords(){
+  modal="records";
+  const board=REC.mode+"_"+REC.side;
+  const head=`<h2>Records</h2>
+   <div class="seg"><button class="${REC.mode==="online"?"on":""}" data-a="rmode" data-i="online">En ligne</button><button class="${REC.mode==="solo"?"on":""}" data-a="rmode" data-i="solo">Solo</button></div>
+   <div class="seg"><button class="${REC.side==="A"?"on":""}" data-a="rside" data-i="A">Face A · rivière</button><button class="${REC.side==="B"?"on":""}" data-a="rside" data-i="B">Face B · îles</button></div>`;
+  const foot=`<p class="note" style="margin:0">Les 20 meilleurs scores de tous les joueurs du site. Seules les parties en ligne et les parties solo comptent ; les bots ne sont pas classés.</p><div class="tools"><button class="btn primary" data-a="rclose">Fermer</button></div>`;
+  openModal(head+`<p class="note" style="margin:0">Chargement…</p>`+foot);
+  let rows=[];
+  try{
+    await fb();
+    const snap=await firebase.database().ref("records/"+board).orderByChild("score").limitToLast(20).once("value");
+    snap.forEach(c=>{ const v=c.val(); if(v&&typeof v.score==="number") rows.push(v); });
+  }catch(e){
+    if(modal==="records"&&REC.mode+"_"+REC.side===board) openModal(head+`<p class="note" style="margin:0;color:var(--danger);font-weight:700">Impossible de lire les records. Les règles Firebase doivent être mises à jour (voir le guide).</p>`+foot);
+    return;
+  }
+  if(modal!=="records"||REC.mode+"_"+REC.side!==board) return;
+  rows.sort((a,b)=>b.score-a.score||a.date-b.date);
+  const fmt=d=>{ try{ return new Date(d).toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"}); }catch(e){ return ""; } };
+  const mine=rows.filter(r=>r.uid===NET.me).map(r=>r.score);
+  const table=rows.length?`<div style="overflow-x:auto"><table class="dtab"><tr><th>Rang</th><th>Joueur</th><th>Points</th></tr>${rows.map((r,k)=>`<tr class="${r.uid===NET.me?"me":""}"><td style="width:52px"><span class="rk ${k===0?"r1":""}">${k+1}</span></td><td>${esc(r.name||"Joueur")}${r.uid===NET.me?' <span class="tag">toi</span>':""}<span class="why">${fmt(r.date)}${REC.mode==="online"?` · partie à ${r.players||"?"}`:""} · ${r.cubes||0} cube${(r.cubes||0)>1?"s":""}</span></td><td>${r.score}</td></tr>`).join("")}</table></div>`
+    :`<p class="note" style="margin:0">Aucun score enregistré pour l'instant. Termine une partie ${REC.mode==="online"?"en ligne":"solo"} en face ${REC.side} pour ouvrir le classement.</p>`;
+  const best=mine.length?`<p style="margin:0;font-weight:700">Ton meilleur score ici : ${Math.max(...mine)} points.</p>`:"";
+  openModal(head+best+table+foot);
 }
 function notifLine(){
   if(!notifSupported()) return `<p class="note" style="margin:0">Ce navigateur ne propose pas de notifications : garde l'onglet ouvert, un son te préviendra à ton tour.</p>`;
@@ -1183,7 +1238,7 @@ function showSetup(){
   openModal(`<h2>Nouvelle partie</h2>
    <div class="seg"><button class="${!online?"on":""}" data-a="smode" data-i="local">Sur cet appareil</button><button class="${online?"on":""}" data-a="smode" data-i="online">En ligne</button></div>
    ${body}${setup.err?`<p class="note" style="color:var(--danger);margin:0;font-weight:600">${esc(setup.err)}</p>`:""}
-   <div class="tools">${btn}${resume}${S&&!NET.on?`<button class="btn" data-a="close">Retour à la partie</button>`:""}</div>`);
+   <div class="tools">${btn}${resume}${FB_OK?`<button class="btn" data-a="records">Records</button>`:""}${S&&!NET.on?`<button class="btn" data-a="close">Retour à la partie</button>`:""}</div>`);
 }
 function readNames(){ for(let i=0;i<4;i++){ const el=document.getElementById("pname"+i); if(el) setup.names[i]=el.value; } const c=document.getElementById("pcode"); if(c) setup.code=c.value.trim().toUpperCase(); }
 const isDefaultName=(n,i)=>{ n=(n||"").trim(); return !n || n==="Joueur "+(i+1) || BOTNAME.includes(n); };
@@ -1229,7 +1284,7 @@ document.addEventListener("click",e=>{
   const cellG=e.target.closest("[data-cell]"); if(cellG){ cellTap(+cellG.dataset.cell); return; }
   const el=e.target.closest("[data-a]"); if(!el) return;
   const a=el.dataset.a, i=el.dataset.i;
-  if(a==="bg"){ if(modal==="lobby") return; if(e.target===el && modal!=="setup") closeModal(); else if(e.target===el && S) closeModal(); return; }
+  if(a==="bg"){ if(modal==="lobby") return; if(modal==="records"){ if(e.target===el) recClose(); return; } if(e.target===el && modal!=="setup") closeModal(); else if(e.target===el && S) closeModal(); return; }
   if(el.disabled) return;
   switch(a){
     case "pick": pick(+i); break;
@@ -1257,6 +1312,10 @@ document.addEventListener("click",e=>{
     case "obot": if(NET.host) NET.ref.child("seats/"+i).set({type:"bot",lv:1,uid:"",name:BOTNAME[1]+" "+(+i+1)}); break;
     case "ostart": netStart(); break;
     case "onotif": askNotif(); break;
+    case "records": showRecords(); break;
+    case "rmode": REC.mode=i; showRecords(); break;
+    case "rside": REC.side=i; showRecords(); break;
+    case "rclose": recClose(); break;
     case "oleave": netLeave(); setup.err=""; showSetup(); break;
     case "otakeover": if(NET.on&&NET.host&&S&&!S.over&&!isBot(P())){ P().bot=1; commit(); } break;
     case "fskip": if(fin){ fin.skip=true; finishFinale(); } break;

@@ -92,6 +92,14 @@ Bon à savoir :
 - Le mode **Sur cet appareil** fonctionne toujours, même sans Firebase.
 - **Être prévenu à son tour** : dans la salle d'attente, clique sur **Me prévenir quand c'est mon tour** et autorise les notifications. Quand c'est ton tour, un son retentit, le téléphone vibre et, si l'onglet est en arrière-plan, une notification s'affiche et le titre de l'onglet clignote. La page du jeu doit rester ouverte : sur téléphone, le navigateur peut la mettre en pause si tu changes d'appli trop longtemps. Sur iPhone, les notifications ne marchent que si le site a été ajouté à l'écran d'accueil.
 
+## Records
+
+Le bouton **Records** affiche les 20 meilleurs scores de tous les joueurs du site, séparés entre parties **en ligne** et **solo**, et entre **face A** et **face B**. Chaque joueur humain d'une partie en ligne, et le joueur d'une partie solo, y est inscrit automatiquement à la fin de la partie. Les bots et les parties à plusieurs sur un seul appareil ne sont pas classés.
+
+Les records demandent des règles de base de données à jour : si tu as installé le jeu avant leur ajout, recolle le contenu de `database.rules.json` dans Firebase → Realtime Database → **Règles**, puis **Publier**.
+
+Un record ne peut être ni modifié ni supprimé depuis le jeu. Pour en retirer un, ouvre Firebase → Realtime Database → **Données** → `records`, et supprime la ligne.
+
 ## En cas de problème
 
 | Message ou symptôme | Cause probable |
@@ -100,6 +108,7 @@ Bon à savoir :
 | « Connexion à Firebase impossible » | Connexion anonyme non activée (étape 2) ou domaine non autorisé (étape 6) |
 | « La base de données a refusé l'écriture » | Règles non publiées (étape 3) |
 | Rien ne se passe après « Créer la partie » | `databaseURL` absent de `firebase-config.js` |
+| « Le score n'a pas pu être enregistré » ou « Impossible de lire les records » | Règles de la base pas à jour : recolle `database.rules.json` (section Records) |
 | L'ancienne version s'affiche après une mise à jour | Recharge la page en vidant le cache (Ctrl+Maj+R) |
 
 Pour voir les parties en cours, ouvre Firebase → Realtime Database → onglet **Données**. Tu peux supprimer le nœud `games` de temps en temps pour faire le ménage.

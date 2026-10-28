@@ -11,6 +11,17 @@
           ".validate": "newData.isString() && newData.val().length < 500000"
         }
       }
+    },
+    "records": {
+      ".read": "auth != null",
+      "$board": {
+        ".indexOn": ["score"],
+        ".validate": "$board.matches(/^(online|solo)_(A|B)$/)",
+        "$rec": {
+          ".write": "auth != null && !data.exists() && newData.child('uid').val() === auth.uid",
+          ".validate": "$rec.length <= 40 && newData.hasChildren(['name', 'uid', 'score', 'date']) && newData.child('score').isNumber() && newData.child('score').val() >= 0 && newData.child('score').val() <= 500 && newData.child('name').isString() && newData.child('name').val().length <= 16 && newData.child('date').isNumber()"
+        }
+      }
     }
   }
 }
